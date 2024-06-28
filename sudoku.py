@@ -6,7 +6,9 @@ import array as arr
 GRID_SIZE = 9
 
 class Notes(object):
-    """Class for notes on squares within grid"""
+    """Class for notes on squares within grid
+Notes are stored on a single variable using bitmasking
+"""
     max_note = GRID_SIZE
     def __init__(self):
         self.note = 0
@@ -16,15 +18,25 @@ class Notes(object):
         self.note |= 1<<(value - 1)
 
     def clear(self, value: int):
-        self.note &= (2**9 - 1) ^ (1<<(value - 1))
+        self.note &= (2**GRID_SIZE - 1) ^ (1<<(value - 1))
+
+    def check(self, value: int):
+        if self.note & (1<<(value-1)):
+            return True
+        return False
+
+    def toggle(self, value):
+        if self.check(value):
+            self.clear(value)
+        else: 
+            self.mark(value)
 
     def view(self):
         notes = []
         temp = self.note
         for val in range(1, GRID_SIZE+1):
-            if temp % 2:
+            if self.check(val):
                 notes.append(val)
-            temp = temp >> 1
         print(notes)
     pass
 
