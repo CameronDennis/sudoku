@@ -6,6 +6,17 @@ import array as arr
 GRID_SIZE = 9
 TOTAL_SQUARES = GRID_SIZE ** 2
 
+class bcolors:
+    MAGENTA = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 class Notes(object):
     """Class for notes on squares within grid
 Notes are stored on a single variable using bitmasking
@@ -46,10 +57,19 @@ class Square(object):
     
     def __init__(self, value: int = 0 ):
         self.value = int(value)
+        
+        if self.value:
+            self.locked = True
+        else:
+            self.locked = False
+
         self.notes = Notes()
 
     def val(self):
         return self.value
+    
+    def setval(self, value):
+
         pass
 
 class Sudoku(object):
@@ -65,19 +85,26 @@ class Sudoku(object):
 
         pass
 
-    def view(self):
+    def view_ascii(self):
         output = ""
         for val_ind in range(0, TOTAL_SQUARES):
-            output += str(self.board[val_ind].val())
-            output += " "
+            if self.board[val_ind].locked:
+                output += f"{bcolors.MAGENTA}{self.board[val_ind].val()}{bcolors.ENDC} "
+
+            else:
+                output += str(self.board[val_ind].val())
+                output += " "
 
             if (not (val_ind + 1)%3) and ((val_ind + 1) % GRID_SIZE):
-                output += "| "
+                output += f"{bcolors.OKBLUE}| {bcolors.ENDC}"
             if not (val_ind + 1)%GRID_SIZE:
                 output += "\n"
             if not (val_ind + 1)%(GRID_SIZE*3) and ((val_ind + 1) % GRID_SIZE**2):
+                output += bcolors.OKBLUE
                 output += "-" * (GRID_SIZE * 2 + 3)
+                output += bcolors.ENDC
                 output += "\n"
+            
         print(output)
 
     pass

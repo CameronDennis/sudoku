@@ -28,11 +28,11 @@ def notes_basic():
 
 def board_basic():
     board_0 = Sudoku()
-    board_0.view()
+    board_0.view_ascii()
     with open("easy50.txt") as board_file:
         board_1 = list(board_file.readline())[:-1]
         board = Sudoku(board_1)
-        board.view()
+        board.view_ascii()
 
 
 board_basic()
