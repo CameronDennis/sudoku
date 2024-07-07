@@ -54,7 +54,16 @@ Notes are stored on a single variable using bitmasking
 
 class Square(object):
     """Class for squares within grid"""
-    
+
+    def __repr__(self):
+        output = ""
+        if self.locked:
+            output += bcolors.MAGENTA
+        output += f"{self.value}"
+        if self.locked:
+            output += bcolors.ENDC
+        return output
+
     def __init__(self, value: int = 0 ):
         self.value = int(value)
         
@@ -107,7 +116,27 @@ class Sudoku(object):
             
         print(output)
 
-    pass
+    def get_row(self, row_ind):
+        return self.board[row_ind*GRID_SIZE:row_ind*GRID_SIZE+GRID_SIZE]
+    
+    def get_col(self, col_ind):
+        column = []
+        for row in range(GRID_SIZE):
+            column.append(self.board[row*GRID_SIZE + col_ind]) 
+        return column
+    
+    def get_box(self, box_ind):
+        # rows correspond to box_ind // 3 
+        # box 4 -> 4 // 3 = 1*3, 1*3+1, 1*3+2 -> 3,4,5
+        # cols correspond to box_ind % 3
+        # box 4 -> 4 % 3 = 1*3, 1*3+1, 1*3+2, -> 3,4,5
+        box = []
+        row_start = (box_ind//3)*3
+        col_start = (box_ind%3)*3 
+        for row_ind in range(row_start, row_start+3):
+            for col_ind in range(col_start, col_start+3):
+                box.append(self.board[row_ind*GRID_SIZE + col_ind])
+        return box
 
 def main():
     pass

@@ -34,5 +34,19 @@ def board_basic():
         board = Sudoku(board_1)
         board.view_ascii()
 
+    for i in range(9):
+        print(board.get_row(i))
+
+    print("\n")
+
+    for i in range(9):
+        print(board.get_col(i))
+    
+    print("\n")
+    
+    board.view_ascii()
+
+    for i in range(9):
+        print(board.get_box(i))
 
 board_basic()
