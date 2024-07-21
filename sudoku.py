@@ -64,9 +64,21 @@ class Square(object):
             output += bcolors.ENDC
         return output
 
-    def __init__(self, value: int = 0 ):
+    def __init__(self, 
+                 value: int = 0, 
+                 row: int = None, col: int = None, box: int = None):
+        # value is the assigned number for the square
         self.value = int(value)
-        
+
+        # zone is the set of all squares relative to this one
+        # not including itself
+        # ie, square (1,7) would include all squares in row 1, column 7, and box 3
+        self.zone = set()
+
+        self.row = row
+        self.col = col
+        self.box = box
+
         if self.value:
             self.locked = True
         else:
@@ -74,12 +86,19 @@ class Square(object):
 
         self.notes = Notes()
 
-    def val(self):
+    def get_val(self):
         return self.value
     
-    def setval(self, value):
+    def set_val(self, value):
+        if not self.locked:
+            self.value = value
 
-        pass
+    def add_to_zone(self, sqr):
+        if sqr != self:
+            self.zone.add(sqr)
+
+    def get_zone(self):
+        return self.zone
 
 class Sudoku(object):
     """Class for Sudoku"""
@@ -98,10 +117,10 @@ class Sudoku(object):
         output = ""
         for val_ind in range(0, TOTAL_SQUARES):
             if self.board[val_ind].locked:
-                output += f"{bcolors.MAGENTA}{self.board[val_ind].val()}{bcolors.ENDC} "
+                output += f"{bcolors.MAGENTA}{self.board[val_ind].get_val()}{bcolors.ENDC} "
 
             else:
-                output += str(self.board[val_ind].val())
+                output += str(self.board[val_ind].get_val())
                 output += " "
 
             if (not (val_ind + 1)%3) and ((val_ind + 1) % GRID_SIZE):
@@ -137,6 +156,22 @@ class Sudoku(object):
             for col_ind in range(col_start, col_start+3):
                 box.append(self.board[row_ind*GRID_SIZE + col_ind])
         return box
+    
+    def get_square(self, row, col):
+        return self.board[row*GRID_SIZE + col]
+    
+    def init_zone(self, square: Square):
+        for sqr in self.get_row(row):
+            square.add_to_zone(sqr)
+        for sqr in self.get_col(col):
+            square.add_to_zone(sqr)
+        for sqr in self.get_box(box):
+            square.add_to_zone(sqr)
+        return self.zone
+    
+    def get_zone(self):
+        return self.zone
+    
 
 def main():
     pass

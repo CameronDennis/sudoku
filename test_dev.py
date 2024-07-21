@@ -43,10 +43,15 @@ def board_basic():
         print(board.get_col(i))
     
     print("\n")
-    
+
     board.view_ascii()
 
     for i in range(9):
         print(board.get_box(i))
+
+    print(board.get_square(3,3))
+    board.get_square(3,3).set_val(9)
+    print(board.get_square(3,3))
+
 
 board_basic()
